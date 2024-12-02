@@ -7,11 +7,6 @@
 
 //Classe JeuDeLaVie
 class JeuDeLaVie {
-public:
-    JeuDeLaVie(const std::string& filePath, int maxIterations);
-    void executerModeConsole();
-    void executerModeGraphique();
-
 private:
     Grille grille; // grille de jeu
     sf::RenderWindow fenetre; //fenetre graphique
@@ -19,6 +14,13 @@ private:
 
     void afficherGrille();
     void sauvegarderEtat(int iteration);
+    
+public:
+    JeuDeLaVie(const std::string& filePath, int maxIterations);
+    void executerModeConsole();
+    void executerModeGraphique();
+
+
 };
 
 #endif // JEUEDELAVIE_H

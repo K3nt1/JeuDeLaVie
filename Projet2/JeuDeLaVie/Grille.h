@@ -8,6 +8,12 @@
 
 //Classe Grille
 class Grille {
+private:
+    int largeur;
+    int hauteur;
+    std::vector<std::vector<Cellule>> cellules; //Matrice de cellules
+    int compterVoisinsVivants(int x, int y) const; //Compter le nombre de voisins vivants
+    
 public:
     Grille(int largeur, int hauteur);
     void chargerDepuisFichier(const std::string& filePath); //Charger une grille depuis un fichier
@@ -16,12 +22,6 @@ public:
     bool mettreAJour(); //Mettre à jour la grille
     void afficher(sf::RenderWindow &fenetre) const; //Afficher la grille
     void afficherConsole() const; //Afficher la grille dans la console
-
-private:
-    int largeur;
-    int hauteur;
-    std::vector<std::vector<Cellule>> cellules; //Matrice de cellules
-    int compterVoisinsVivants(int x, int y) const; //Compter le nombre de voisins vivants
 };
 
 #endif // GRILLE_H
