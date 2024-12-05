@@ -5,22 +5,11 @@
 class Cellule {
 private:
     bool vivante;
-    bool obstacle;
     
 public:
-    Cellule() : vivante(false), obstacle(false) {}
-    bool estVivante() const{
-        return vivante;
-    } //retourne vrai si la cellule est vivante -> getter
-    void setVivante(bool v){ 
-        vivante = v; //modifie l'etat de la cellule -> setter
-    }
-    bool estObstacle() const{
-        return obstacle;
-    }
-    void setObstacle(bool o){
-        obstacle = o;
-    }
+    Cellule() : vivante(false) {}
+    bool estVivante() const { return vivante; } //retourne vrai si la cellule est vivante -> getter
+    void setVivante(bool etat) { vivante = etat; } //modifie l'etat de la cellule -> setter
 };
 
 #endif // CELLULE_H

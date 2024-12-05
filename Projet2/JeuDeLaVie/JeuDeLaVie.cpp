@@ -35,18 +35,17 @@ void JeuDeLaVie::executerModeConsole() {
 
 // Fonction pour lancer le jeu en mode graphique
 void JeuDeLaVie::executerModeGraphique() {
-    sf::RenderWindow fenetre(sf::VideoMode(largeur * 10, hauteur * 10), "Jeu de la Vie");
     while (fenetre.isOpen()) { // Boucle sur l'ouverture de la fenêtre
         sf::Event event; // Variable pour stocker les événements
         while (fenetre.pollEvent(event)) { // Boucle sur les événements
             if (event.type == sf::Event::Closed) { // Si l'utilisateur ferme la fenêtre
                 fenetre.close(); // Fermer la fenêtre
         }
-    }
+
         grille.mettreAJour(); // Mettre à jour la grille
         afficherGrille(); // Afficher la grille
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Pause entre itérations
-        
+        std::this_thread::sleep_for(std::chrono::milliseconds(500)); // Pause entre itérations
+        }
     }
 }
 

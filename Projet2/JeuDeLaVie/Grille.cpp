@@ -1,4 +1,3 @@
-
 #include "Grille.h"
 #include <iostream>
 #include <cstdlib> // Pour les fonctions de manipulation de chaînes de caractères
@@ -6,17 +5,6 @@
 
 Grille::Grille(int largeur, int hauteur) : largeur(largeur), hauteur(hauteur), cellules(largeur, std::vector<Cellule>(hauteur)) {}
 
-void Grille::initialiserObsatcle(int x, int y, bool, vivant){
-    if (x >= 0 && x < largeur && y >= 0 && y < hauteur) {
-        cellules[x][y].setObstacle(true);
-        cellules[x][y].setVivante(vivant);
-}
-}
-void Grille::initialiserCellule(int x, int y, bool vivante) {
-    if (x >= 0 && x < largeur && y >= 0 && y < hauteur) {
-        cellules[x][y].setVivante(vivante);
-    }
-}
 // Chargement d'une grille à partir d'un fichier
 void Grille::chargerDepuisFichier(const std::string& filePath) {
     std::ifstream inFile(filePath); // Ouvrir le fichier en lecture seule
@@ -30,12 +18,7 @@ void Grille::chargerDepuisFichier(const std::string& filePath) {
         for (int x = 0; x < largeur; ++x) { // Lecture de chaque cellule de la ligne
             int etat;
             inFile >> etat; // Lecture de l'état de la cellule (0 ou 1)
-            if(etat == 2){
-                cellules[x][y].setObstacle(false);
-            }
-            else{ 
             cellules[x][y].setVivante(etat == 1); // Mise à jour de l'état de la cellule
-        }
         }
     }
 }
@@ -55,12 +38,7 @@ void Grille::sauvegarderDansFichier(std::ostream& out) const {
 void Grille::afficherConsole() const { 
     for (int y = 0; y < hauteur; ++y) { // Affichage de chaque ligne de la grille
         for (int x = 0; x < largeur; ++x) { // Affichage de chaque cellule de la ligne
-            if(cellules[x][y].estObstacle()){
-                std::cout << (cellules[x][y].estObstacle() ? "X" : "x" );
-            }
-            else{ 
             std::cout << (cellules[x][y].estVivante() ? "1" : "0") << " "; // Affichage de l'état de la cellule
-        }
         }
         std::cout << "\n";
     }
@@ -73,9 +51,6 @@ bool Grille::mettreAJour() {
 
     for (int x = 0; x < largeur; ++x) { // Mise à jour de chaque cellule de la grille
         for (int y = 0; y < hauteur; ++y) { // Mise à jour de chaque cellule de la ligne
-            if(cellules[x][y].estObstacle()){
-                continue;
-            }
             int voisinsVivants = compterVoisinsVivants(x, y);
             bool etatActuel = cellules[x][y].estVivante(); // Récupération de l'état actuel de la cellule
             bool nouvelEtat = etatActuel; // Initialisation de l'état nouveau de la cellule
@@ -107,7 +82,7 @@ int Grille::compterVoisinsVivants(int x, int y) const {
             if (dx == 0 && dy == 0) continue; // Ignore la cellule elle-même
             int nx = (x + dx + largeur) % largeur; // Gestion des bords (grille torique)
             int ny = (y + dy + hauteur) % hauteur;
-            if (!cellules[nx][ny].estObstacle() && cellules[nx][ny].estVivante()) {
+            if (cellules[nx][ny].estVivante()) {
                 ++compte;
             }
         }
@@ -117,30 +92,14 @@ int Grille::compterVoisinsVivants(int x, int y) const {
 
 void Grille::afficher(sf::RenderWindow &fenetre) const {
     sf::RectangleShape cellule(sf::Vector2f(9.0f, 9.0f)); // Taille des cellules
-
-    sf::RectangleShape obstacle(sf::Vector2f(9.0f, 9.0f)); // Taille des cellules obstacles
-   
+    cellule.setFillColor(sf::Color::White); 
 
     for (int x = 0; x < largeur; ++x) { // Affichage de chaque cellule de la grille
         for (int y = 0; y < hauteur; ++y) { // Affichage de chaque cellule de la ligne
-            if(obstacles[x][y].estObstacle()){
-                cellule.setFillColor(cellules[x][y].estVivante() ? sf::Color::Red : sf::Color(128, 0 , 0)); 
-                obsatcle.setPosition( x * 10, y *10);
-                fenetre.draw(obstacle);
-            }
             if (cellules[x][y].estVivante()) { // Si la cellule est vivante
                 cellule.setPosition(x * 10, y * 10); // Position de la cellule
-                cellule.setFillColor(sf::Color::White);     
                 fenetre.draw(cellule); // Affichage de la cellule
             }
         }
-    }
-}
-
-void Grille::ajouterObstacle(int x, int y){
-    if (x >= 0 && x < largeur && y >= 0 && y < hauteur){
-        cellules[x][y].setObstacle(true);
-        cellules[x][y].setVivantes(false);
-        std::cout << "Obstacle ajouté à ( " << x << "," << y << ")\n";
     }
 }

@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
     int maxIterations = (argc == 4) ? std::stoi(argv[3]) : 100; //Récupère le nombre d'itérations s'il est spécifié
 
     try { //Tente d'ouvrir le fichier
-        JeuDeLaVie jeu(filePath, maxIterations); //Crée un objet JeuDeLaVie avec le chemin du fichier et le nombre d
+        JeuDeLaVie jeu(filePath, maxIterations); //Crée un objet JeuDeLaVie avec le chemin du fichier et le nombre d'itérations
 
         if (mode == "console") {
             jeu.executerModeConsole();
