@@ -14,13 +14,11 @@ private:
 
     void afficherGrille();
     void sauvegarderEtat(int iteration);
-    
+
 public:
     JeuDeLaVie(const std::string& filePath, int maxIterations);
     void executerModeConsole();
     void executerModeGraphique();
-
-
 };
 
 #endif // JEUEDELAVIE_H

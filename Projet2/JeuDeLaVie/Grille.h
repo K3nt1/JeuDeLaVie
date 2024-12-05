@@ -22,6 +22,8 @@ public:
     bool mettreAJour(); //Mettre à jour la grille
     void afficher(sf::RenderWindow &fenetre) const; //Afficher la grille
     void afficherConsole() const; //Afficher la grille dans la console
+    void initialiserObstacle(int x, int y, bool vivant);
+    void initialiserCellule(int x, int y, bool vivante);
 };
 
 #endif // GRILLE_H
