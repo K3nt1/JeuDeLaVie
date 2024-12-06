@@ -5,7 +5,7 @@
 #include <thread> // Pour la fonction sleep
 
 JeuDeLaVie::JeuDeLaVie(const std::string& filePath, int maxIterations)
-    : grille(0, 0), fenetre(sf::VideoMode(500, 500), "Jeu de la Vie"), maxIterations(maxIterations) { // On crée la grille et la fenêtre
+    : grille(0, 0), fenetre(sf::VideoMode(503, 503), "Jeu de la Vie"), maxIterations(maxIterations) { // On crée la grille et la fenêtre
     grille.chargerDepuisFichier(filePath); // On charge la grille depuis le fichier
 }
 
@@ -44,7 +44,7 @@ void JeuDeLaVie::executerModeGraphique() {
 
         grille.mettreAJour(); // Mettre à jour la grille
         afficherGrille(); // Afficher la grille
-        std::this_thread::sleep_for(std::chrono::milliseconds(500)); // Pause entre itérations
+        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Pause entre itérations
         }
     }
 }
