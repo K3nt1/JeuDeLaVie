@@ -1,0 +1,23 @@
+# Fichiers de compilation
+*.o
+*.obj
+main
+*.exe
+*.pdb
+*.ilk
+*.pch
+
+# Dossiers et fichiers générés
+output/
+build/
+cmake-build-*/
+
+# IDE
+.vscode/
+.idea/
+*.user
+*.suo
+
+# Système
+.DS_Store
+Thumbs.db
