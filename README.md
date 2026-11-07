@@ -12,6 +12,16 @@ Le projet propose deux modes d'exécution :
 
 La grille utilise des **bords toriques** : les cellules situées sur un bord considèrent les cellules du bord opposé comme voisines.
 
+## Aperçu
+
+Les captures d'écran de l'application seront ajoutées dans `docs/images/` après une exécution locale du programme. Elles doivent montrer l'application réelle, et non une maquette.
+
+<!-- Ajouter les captures réelles ici après les avoir placées dans docs/images/.
+Exemple :
+![Mode graphique](docs/images/mode-graphique.png)
+![Mode console](docs/images/mode-console.png)
+-->
+
 ## Règles du jeu
 
 Pour chaque génération, les règles de Conway sont appliquées simultanément à toutes les cellules :
@@ -25,10 +35,10 @@ Pour chaque génération, les règles de Conway sont appliquées simultanément 
 
 ## Technologies
 
-- **C++**
+- **C++17**
 - **Programmation orientée objet** : séparation des responsabilités entre les classes `Cellule`, `Grille` et `JeuDeLaVie`
-- **SFML** : affichage graphique
-- **Makefile** : compilation du projet
+- **SFML 2.x** : affichage graphique
+- **GNU Make** : compilation et exécution des tests
 
 ## Organisation du dépôt
 
@@ -39,19 +49,22 @@ Pour chaque génération, les règles de Conway sont appliquées simultanément 
 │   │   ├── Cellule.h / Cellule.cpp
 │   │   ├── Grille.h / Grille.cpp
 │   │   └── JeuDeLaVie.h / JeuDeLaVie.cpp
+│   ├── tests/
+│   │   └── test_grille.cpp
 │   ├── main.cpp
-│   ├── Makefile
-│   └── *.txt                 # Configurations initiales de grilles
+│   └── Makefile
+├── docs/
+│   └── images/                 # Captures d'écran de l'application
 └── README.md
 ```
 
 ## Prérequis
 
-- Un compilateur C++ compatible avec **C++17** (par exemple `clang++` ou `g++`)
+- Un compilateur C++17 (par exemple `clang++` ou `g++`)
 - **SFML 2.x** avec les composants Graphics, Window et System
 - **GNU Make**
 
-> Le Makefile fourni utilise actuellement `clang++` et les bibliothèques SFML installées sur le système.
+Le Makefile fourni utilise `clang++` et les bibliothèques SFML installées sur le système.
 
 ## Compilation
 
@@ -84,13 +97,30 @@ Syntaxe :
 
 Le nombre de générations est fixé à **100** lorsqu'il n'est pas précisé.
 
+## Tests unitaires
+
+Des tests automatisés vérifient le comportement du moteur de simulation :
+
+- stabilité d'un bloc de quatre cellules ;
+- évolution d'un oscillateur « blinker » sur deux générations ;
+- stabilité d'une grille vide ;
+- gestion d'un fichier de grille introuvable.
+
+Depuis le dossier `Projet` :
+
+```bash
+make test
+```
+
+Le programme de test affiche le résultat de chaque vérification et renvoie un code d'erreur si au moins un test échoue. Les tests utilisent SFML car la classe `Grille` inclut actuellement son module graphique.
+
 ## Format des fichiers de grille
 
 Les fichiers d'entrée sont des fichiers texte :
 1. La première ligne contient la largeur et la hauteur.
 2. Les lignes suivantes contiennent les états des cellules : `0` pour morte et `1` pour vivante.
 
-Exemple de début de fichier pour une grille de 5 × 5 :
+Exemple de grille de 5 × 5 :
 
 ```text
 5 5
@@ -104,14 +134,6 @@ Exemple de début de fichier pour une grille de 5 × 5 :
 ## Sauvegarde
 
 En mode console, chaque génération affichée est enregistrée dans le dossier `output/`, créé automatiquement à côté du programme lorsqu'il n'existe pas.
-
-## Pistes d'amélioration
-
-- Ajouter des tests automatisés pour les règles de transition.
-- Permettre de modifier la vitesse de la simulation graphique.
-- Ajouter des commandes pause / reprise et redémarrage.
-- Rendre la taille de la fenêtre proportionnelle à celle de la grille.
-- Proposer un choix entre bords toriques et bords fixes.
 
 ---
 
