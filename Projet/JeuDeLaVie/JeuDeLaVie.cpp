@@ -5,6 +5,7 @@
 #include <chrono>
 #include <filesystem>
 #include <fstream>
+#include <stdexcept>
 
 JeuDeLaVie::JeuDeLaVie(const std::string& filePath, int maxIterations)
     : grille(0, 0),
