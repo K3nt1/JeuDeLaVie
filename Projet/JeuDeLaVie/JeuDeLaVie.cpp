@@ -1,57 +1,75 @@
 #include "JeuDeLaVie.h"
+
 #include <iostream>
-#include <fstream>
+#include <thread>
+#include <chrono>
 #include <filesystem>
-#include <thread> // Pour la fonction sleep
+#include <fstream>
 
 JeuDeLaVie::JeuDeLaVie(const std::string& filePath, int maxIterations)
-    : grille(0, 0), fenetre(sf::VideoMode(503, 503), "Jeu de la Vie"), maxIterations(maxIterations) { // On crée la grille et la fenêtre
-    grille.chargerDepuisFichier(filePath); // On charge la grille depuis le fichier
+    : grille(0, 0),
+      fenetre(sf::VideoMode(503, 503), "Jeu de la Vie"),
+      maxIterations(maxIterations) {
+    if (maxIterations <= 0) {
+        throw std::invalid_argument("Le nombre d'iterations doit etre positif.");
+    }
+
+    grille.chargerDepuisFichier(filePath);
 }
 
-// Fonction pour sauvegarder l'état de la grille
 void JeuDeLaVie::sauvegarderEtat(int iteration) {
-    std::string folderName = "output"; // Nom du dossier de sauvegarde
-    std::filesystem::create_directory(folderName); // Créer le dossier s'il n'existe pas
+    const std::filesystem::path outputDirectory("output");
+    std::filesystem::create_directories(outputDirectory);
 
-    std::ofstream outFile(folderName + "/iteration_" + std::to_string(iteration) + ".txt"); // Nom du fichier de sauvegarde
-    grille.sauvegarderDansFichier(outFile); // Sauvegarder la grille dans le fichier
+    std::ofstream outFile(outputDirectory / ("iteration_" + std::to_string(iteration) + ".txt"));
+    if (!outFile) {
+        throw std::runtime_error("Impossible de sauvegarder l'iteration " + std::to_string(iteration));
+    }
+
+    grille.sauvegarderDansFichier(outFile);
 }
 
-// Fonction pour lancer le jeu en mode console
 void JeuDeLaVie::executerModeConsole() {
-    for (int iteration = 0; iteration < maxIterations; ++iteration) { // Boucle sur les itérations
-        std::cout << "Itération " << iteration << ":" << std::endl; // Afficher l'itération en cours
-        grille.afficherConsole(); // Afficher la grille en console
+    for (int iteration = 0; iteration < maxIterations; ++iteration) {
+        std::cout << "Iteration " << iteration << ":\n";
+        grille.afficherConsole();
+        sauvegarderEtat(iteration);
 
-        sauvegarderEtat(iteration); // Sauvegarder l'état de la grille
-
-        if (!grille.mettreAJour()) { // Si la grille est stable, arrêter le jeu
-            std::cout << "Aucune évolution. Fin de la simulation." << std::endl; // Afficher le message de fin
+        if (!grille.mettreAJour()) {
+            std::cout << "Aucune evolution. Fin de la simulation.\n";
             break;
         }
     }
 }
 
-// Fonction pour lancer le jeu en mode graphique
 void JeuDeLaVie::executerModeGraphique() {
-    while (fenetre.isOpen()) { // Boucle sur l'ouverture de la fenêtre
-        sf::Event event; // Variable pour stocker les événements
-        while (fenetre.pollEvent(event)) { // Boucle sur les événements
-            if (event.type == sf::Event::Closed) { // Si l'utilisateur ferme la fenêtre
-                fenetre.close(); // Fermer la fenêtre
+    fenetre.setFramerateLimit(10);
+
+    int iteration = 0;
+    while (fenetre.isOpen() && iteration < maxIterations) {
+        sf::Event event;
+        while (fenetre.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                fenetre.close();
+            }
         }
 
-        grille.mettreAJour(); // Mettre à jour la grille
-        afficherGrille(); // Afficher la grille
-        std::this_thread::sleep_for(std::chrono::milliseconds(100)); // Pause entre itérations
+        if (!fenetre.isOpen()) {
+            break;
         }
+
+        afficherGrille();
+
+        if (!grille.mettreAJour()) {
+            break;
+        }
+
+        ++iteration;
     }
 }
 
-// Fonction pour afficher la grille
 void JeuDeLaVie::afficherGrille() {
-    fenetre.clear(); // Effacer l'écran
-    grille.afficher(fenetre); // Afficher la grille
-    fenetre.display(); // Afficher la fenêtre
+    fenetre.clear(sf::Color::Black);
+    grille.afficher(fenetre);
+    fenetre.display();
 }
