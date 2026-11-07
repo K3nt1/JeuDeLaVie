@@ -1,12 +1,14 @@
 CXX = clang++
-CXXFLAGS = -std=c++17 -IJeuDeLaVie -g -Wall -Wextra -Werror
-LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-audio -lsfml-network -lsfml-system
+CXXFLAGS = -std=c++17 -IJeuDeLaVie -Wall -Wextra -Werror
+LDFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
 
 SRC_DIR = JeuDeLaVie
 SRCS = $(wildcard $(SRC_DIR)/*.cpp) main.cpp
 OBJS = $(SRCS:.cpp=.o)
 
 TARGET = main
+
+.PHONY: all clean
 
 all: $(TARGET)
 
